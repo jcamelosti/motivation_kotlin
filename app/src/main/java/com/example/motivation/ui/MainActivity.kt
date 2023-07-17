@@ -8,9 +8,11 @@ import com.example.motivation.infra.MotivationConstants
 import com.example.motivation.R
 import com.example.motivation.infra.SecurityPreferences
 import com.example.motivation.databinding.ActivityMainBinding
+import com.example.motivation.repository.Mock
 
 class MainActivity : ComponentActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding
+    private var categoryId = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +21,8 @@ class MainActivity : ComponentActivity(), View.OnClickListener {
         setContentView(binding.root)
 
         handleUserName()
+        handleFilter(R.id.image_all)
+        handleNextPhrase()
 
         binding.imageAll.setOnClickListener(this)
         binding.imageHappy.setOnClickListener(this)
@@ -29,10 +33,14 @@ class MainActivity : ComponentActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         if (view.id == R.id.button_new_phrase) {
-            var s = ""
+            handleNextPhrase()
         }else if(view.id in listOf(R.id.image_all, R.id.image_happy, R.id.image_sunny)){
             handleFilter(view.id)
         }
+    }
+
+    private fun handleNextPhrase() {
+        binding.textPhrase.text = Mock().getPhrase(categoryId)
     }
 
     private fun handleFilter(id: Int) {
@@ -40,12 +48,19 @@ class MainActivity : ComponentActivity(), View.OnClickListener {
         binding.imageSunny.setColorFilter(ContextCompat.getColor(this, R.color.dark_purple))
         binding.imageHappy.setColorFilter(ContextCompat.getColor(this, R.color.dark_purple))
 
-        if(id == R.id.image_all){
-            binding.imageAll.setColorFilter(ContextCompat.getColor(this, R.color.white))
-        }else if(id == R.id.image_happy){
-            binding.imageHappy.setColorFilter(ContextCompat.getColor(this, R.color.white))
-        }else if(id == R.id.image_sunny){
-            binding.imageSunny.setColorFilter(ContextCompat.getColor(this, R.color.white))
+        when (id) {
+            R.id.image_all -> {
+                binding.imageAll.setColorFilter(ContextCompat.getColor(this, R.color.white))
+                categoryId = MotivationConstants.PHRASEFILTER.ALL
+            }
+            R.id.image_happy -> {
+                binding.imageHappy.setColorFilter(ContextCompat.getColor(this, R.color.white))
+                categoryId = MotivationConstants.PHRASEFILTER.HAPPY
+            }
+            R.id.image_sunny -> {
+                binding.imageSunny.setColorFilter(ContextCompat.getColor(this, R.color.white))
+                categoryId = MotivationConstants.PHRASEFILTER.SUNNY
+            }
         }
     }
 
