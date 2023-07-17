@@ -4,14 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 
 class SecurityPreferences(context: Context) {
-    private val security: SharedPreferences =
+    private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("Motivation", Context.MODE_PRIVATE)
 
-    fun storeString(chave: String, str: String){
-        security.edit().putString(chave, str).apply()
+    fun storeString(key: String, value: String) {
+        this.sharedPreferences.edit().putString(key, value).apply()
     }
 
-    fun getString(chave: String): String {
-        return security.getString(chave, "") ?: ""
+    fun getStoredString(key: String): String {
+        return this.sharedPreferences.getString(key, "Insira seu nome.") ?: ""
     }
 }
